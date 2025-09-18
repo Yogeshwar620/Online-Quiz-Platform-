@@ -1,4 +1,4 @@
-# 🧠 Quiz by Yogesh - Online Quiz Platform
+# 🧠 Quiz by Yogeshwar Yadav - Online Quiz Platform
 
 ## 👨‍💻 Project Information
 
