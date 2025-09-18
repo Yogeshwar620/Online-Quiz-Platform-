@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz by Yogesh - Online Quiz Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-brain"></i>
+                <span>Quiz by Yogesh</span>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link active" data-page="home">Home</a>
+                <a href="#" class="nav-link" data-page="quizzes">Quizzes</a>
+                <a href="#" class="nav-link" data-page="leaderboard">Leaderboard</a>
+                <a href="#" class="nav-link" data-page="profile" style="display: none;">Profile</a>
+                <a href="#" class="nav-link admin-only" data-page="admin" style="display: none;">Admin</a>
+            </div>
+            <div class="nav-auth">
+                <button class="btn-login" id="loginBtn">Login</button>
+                <div class="user-info" id="userInfo" style="display: none;">
+                    <span id="userName"></span>
+                    <button class="btn-logout" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <div class="hero">
+            <div class="hero-content">
+                <h1>Welcome to Quiz by Yogesh</h1>
+                <p>Test your knowledge with our interactive quiz platform. Choose from various categories and challenge yourself!</p>
+                <button class="btn-primary" onclick="showPage('quizzes')">Start Quiz</button>
+            </div>
+        </div>
+
+        <!-- Footer Credit -->
+        <div class="footer-credit">
+            <p><strong>Created and Developed by Yogeshwar Yadav</strong></p>
+            <p>For IT Developer Company - Web Development Internship</p>
+            <p>Contact: <a href="mailto:info@itdeveloper.in">info@itdeveloper.in</a></p>
+        </div>
+    </div>
+
+    <!-- Quiz List Page -->
+    <div id="quizzes" class="page">
+        <div class="container">
+            <h2>Available Quizzes</h2>
+
+            <!-- Quiz Filters -->
+            <div class="filters">
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="java">Java</option>
+                    <option value="general">General Knowledge</option>
+                </select>
+                <select id="difficultyFilter">
+                    <option value="">All Difficulty</option>
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+                <button class="btn-secondary" onclick="applyFilters()">Filter</button>
+            </div>
+
+            <!-- Quiz Grid -->
+            <div class="quiz-grid" id="quizGrid">
+                <!-- Quiz cards will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Taking Page -->
+    <div id="quiz-taking" class="page">
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <h3 id="quizTitle">Quiz Title</h3>
+                <div class="quiz-info">
+                    <span>Question <span id="currentQ">1</span> of <span id="totalQ">10</span></span>
+                    <div class="timer">
+                        <i class="fas fa-clock"></i>
+                        <span id="timeLeft">10:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+
+            <div class="question-container">
+                <div class="question">
+                    <h4 id="questionText">Question will appear here</h4>
+                </div>
+                <div class="options" id="optionsContainer">
+                    <!-- Options will be loaded here -->
+                </div>
+            </div>
+
+            <div class="quiz-controls">
+                <button class="btn-secondary" id="prevBtn" onclick="prevQuestion()" disabled>Previous</button>
+                <button class="btn-primary" id="nextBtn" onclick="nextQuestion()">Next</button>
+                <button class="btn-success" id="submitBtn" onclick="submitQuiz()" style="display: none;">Submit Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Page -->
+    <div id="results" class="page">
+        <div class="results-container">
+            <div class="results-header">
+                <i class="fas fa-trophy"></i>
+                <h2>Quiz Completed!</h2>
+            </div>
+
+            <div class="score-display">
+                <div class="score-circle">
+                    <span id="scorePercent">0%</span>
+                </div>
+                <p>Your Score</p>
+            </div>
+
+            <div class="results-stats">
+                <div class="stat">
+                    <strong id="correctCount">0</strong>
+                    <span>Correct</span>
+                </div>
+                <div class="stat">
+                    <strong id="incorrectCount">0</strong>
+                    <span>Wrong</span>
+                </div>
+                <div class="stat">
+                    <strong id="timeTaken">0:00</strong>
+                    <span>Time</span>
+                </div>
+            </div>
+
+            <div class="results-actions">
+                <button class="btn-primary" onclick="showPage('quizzes')">Take Another Quiz</button>
+                <button class="btn-secondary" onclick="showPage('leaderboard')">View Leaderboard</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard Page -->
+    <div id="leaderboard" class="page">
+        <div class="container">
+            <h2>Leaderboard</h2>
+
+            <div class="leaderboard-filters">
+                <select id="leaderboardQuiz">
+                    <option value="">All Quizzes</option>
+                </select>
+                <select id="leaderboardPeriod">
+                    <option value="all">All Time</option>
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                </select>
+            </div>
+
+            <div class="leaderboard-table">
+                <div class="table-header">
+                    <div>Rank</div>
+                    <div>Name</div>
+                    <div>Score</div>
+                    <div>Time</div>
+                    <div>Date</div>
+                </div>
+                <div class="table-body" id="leaderboardBody">
+                    <!-- Leaderboard entries will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Page -->
+    <div id="profile" class="page">
+        <div class="container">
+            <h2>My Profile</h2>
+
+            <div class="profile-info">
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <h3 id="totalQuizzes">0</h3>
+                        <p>Quizzes Taken</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="avgScore">0%</h3>
+                        <p>Average Score</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="bestScore">0%</h3>
+                        <p>Best Score</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-history">
+                <h3>Quiz History</h3>
+                <div class="history-list" id="historyList">
+                    <!-- Quiz history will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Page -->
+    <div id="admin" class="page">
+        <div class="container">
+            <h2>Admin Dashboard</h2>
+
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="showTab('quizManagement')">Quiz Management</button>
+                <button class="tab-btn" onclick="showTab('userManagement')">Users</button>
+                <button class="tab-btn" onclick="showTab('analytics')">Analytics</button>
+            </div>
+
+            <!-- Quiz Management Tab -->
+            <div id="quizManagement" class="tab-content active">
+                <div class="admin-header">
+                    <h3>Manage Quizzes</h3>
+                    <button class="btn-primary" onclick="showCreateQuizModal()">Create New Quiz</button>
+                </div>
+
+                <div class="admin-table">
+                    <div class="table-header">
+                        <div>Title</div>
+                        <div>Category</div>
+                        <div>Questions</div>
+                        <div>Difficulty</div>
+                        <div>Actions</div>
+                    </div>
+                    <div class="table-body" id="adminQuizList">
+                        <!-- Admin quiz list will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management Tab -->
+            <div id="userManagement" class="tab-content">
+                <h3>User Management</h3>
+                <div class="admin-table">
+                    <div class="table-header">
+                        <div>Name</div>
+                        <div>Email</div>
+                        <div>Quizzes Taken</div>
+                        <div>Average Score</div>
+                        <div>Join Date</div>
+                    </div>
+                    <div class="table-body" id="adminUserList">
+                        <!-- User list will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div id="analytics" class="tab-content">
+                <h3>Quiz Analytics</h3>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h4>Total Quizzes</h4>
+                        <p class="big-number" id="totalQuizzesCount">0</p>
+                    </div>
+                    <div class="analytics-card">
+                        <h4>Total Users</h4>
+                        <p class="big-number" id="totalUsersCount">0</p>
+                    </div>
+                    <div class="analytics-card">
+                        <h4>Quiz Attempts</h4>
+                        <p class="big-number" id="totalAttemptsCount">0</p>
+                    </div>
+                    <div class="analytics-card">
+                        <h4>Average Score</h4>
+                        <p class="big-number" id="globalAvgScore">0%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Login</h3>
+                <button class="close-btn" onclick="closeModal('loginModal')">&times;</button>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn-primary">Login</button>
+                <p class="switch-form">Don't have an account? <a href="#" onclick="showRegisterModal()">Register</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Register</h3>
+                <button class="close-btn" onclick="closeModal('registerModal')">&times;</button>
+            </div>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label>Full Name:</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <button type="submit" class="btn-primary">Register</button>
+                <p class="switch-form">Already have an account? <a href="#" onclick="showLoginModal()">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Quiz Modal -->
+    <div id="createQuizModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>Create New Quiz</h3>
+                <button class="close-btn" onclick="closeModal('createQuizModal')">&times;</button>
+            </div>
+            <form id="createQuizForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Quiz Title:</label>
+                        <input type="text" id="quizTitleInput" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category:</label>
+                        <select id="quizCategoryInput" required>
+                            <option value="javascript">JavaScript</option>
+                            <option value="python">Python</option>
+                            <option value="java">Java</option>
+                            <option value="general">General Knowledge</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Difficulty:</label>
+                        <select id="quizDifficultyInput" required>
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Time Limit (minutes):</label>
+                        <input type="number" id="quizTimeInput" min="1" max="60" value="10" required>
+                    </div>
+                </div>
+
+                <div class="questions-section">
+                    <h4>Questions</h4>
+                    <div id="questionsContainer">
+                        <!-- Questions will be added here -->
+                    </div>
+                    <button type="button" class="btn-secondary" onclick="addQuestion()">Add Question</button>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Create Quiz</button>
+                    <button type="button" class="btn-secondary" onclick="closeModal('createQuizModal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

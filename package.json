@@ -1,0 +1,37 @@
+{
+  "name": "quiz-by-yogesh",
+  "version": "1.0.0",
+  "description": "Simple Online Quiz Platform - Created by Yogeshwar Yadav for IT Developer Company",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "quiz",
+    "education",
+    "nodejs",
+    "express",
+    "javascript",
+    "internship",
+    "it-developer"
+  ],
+  "author": {
+    "name": "Yogeshwar Yadav",
+    "email": "yogesh@itdeveloper.in"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/username/IT-DEVELOPER.git"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
